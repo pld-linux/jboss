@@ -130,7 +130,7 @@ fi
 %{_libdir}/%{name}/lib
 %{_libdir}/%{name}/server
 
-%dif /var/lib/%{name}
+%dir /var/lib/%{name}
 /var/lib/%{name}/default/conf
 /var/lib/%{name}/default/deploy
 /var/lib/%{name}/default/lib
