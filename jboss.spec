@@ -30,7 +30,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		javacfgdir	/etc/sysconfig/java
 
 %description
-JBoss
+Java application server JBoss.
+
+%description -l pl
+Serwer aplikacji Javy JBoss.
 
 %prep
 %setup -q -n %{name}-%{version}-src
