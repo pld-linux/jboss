@@ -79,6 +79,10 @@ javacpmgr --findjars $RPM_BUILD_ROOT > $RPM_BUILD_ROOT%{javacfgdir}/cp.%{name}
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
+# ghost files and directories
+install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/tmp
+install -d $RPM_BUILD_ROOT/var/lib/%{name}/{default,all,minimal}/{db,log,tmp}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -125,7 +129,16 @@ fi
 %{_libdir}/%{name}/docs
 %{_libdir}/%{name}/lib
 %{_libdir}/%{name}/server
-/var/lib/%{name}
+
+/var/lib/%{name}/default/conf
+/var/lib/%{name}/default/deploy
+/var/lib/%{name}/default/lib
+/var/lib/%{name}/all/conf
+/var/lib/%{name}/all/deploy
+/var/lib/%{name}/all/lib
+/var/lib/%{name}/minimal/conf
+/var/lib/%{name}/minimal/deploy
+/var/lib/%{name}/minimal/lib
 
 %attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{javacfgdir}/cp.*
 %attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
