@@ -5,9 +5,9 @@ Version:	3.2.5
 Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
-Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}-src.tar.gz
+Source0:	http://dl.sourceforge.net/jboss/%{name}-%{version}-src.tar.gz
 # Source0-md5:	ded8ad667e49d82a4567d2c8f726fcbc
-Source1:	http://dl.sourceforge.net/sourceforge/%{name}/QuickStart-30x.pdf
+Source1:	http://dl.sourceforge.net/jboss/QuickStart-30x.pdf
 # Source1-md5:	ca9f0c92510b230e91917793516ad814
 Source2:	%{name}.init
 Source3:	%{name}.conf
@@ -45,9 +45,9 @@ build/build.sh
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
-cp %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/bin
 install build/output/%{name}-%{version}/bin/*.jar $RPM_BUILD_ROOT%{_libdir}/%{name}/bin
@@ -74,7 +74,6 @@ do
 	fi
     done
 done
-
 
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
