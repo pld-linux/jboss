@@ -37,6 +37,8 @@ JBoss
 %patch1 -p0
 
 %build
+JAVA_HOME=%{_libdir}/java
+export JAVA_HOME
 build/build.sh
 
 %install
