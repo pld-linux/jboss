@@ -15,14 +15,17 @@ Patch0:		%{name}-jpackage.patch
 Patch1:		%{name}-shutdown.patch
 URL:		http://www.jboss.org/
 BuildRequires:	jdk
+BuildRequires:	rpmbuild(macros) >= 1.159
 Requires:	jdk
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
+Provides:	group(jboss)
+Provides:	user(jboss)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -86,12 +89,22 @@ install -d $RPM_BUILD_ROOT/var/lib/%{name}/{default,all,minimal}/{db,log,tmp}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -z "`getgid %{name}`" ]; then
-	/usr/sbin/groupadd -g 100 -r %{name} 2> /dev/null || true
+if [ -n "`/usr/bin/getgid jboss`" ]; then
+	if [ "`/usr/bin/getgid jboss`" != 100 ]; then
+		echo "Error: group jboss doesn't have gid=100. Correct this before installing %{name}." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 100 jboss
 fi
-if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-	/usr/sbin/useradd -u 100 -g %{name} -M -r -d %{_libdir}/%{name} -s /bin/sh \
-		-c "JBoss" %{name} 2> /dev/null || true
+if [ -n "`/bin/id -u jboss 2>/dev/null`" ]; then
+	if [ "`/bin/id -u jboss`" != 100 ]; then
+		echo "Error: user jboss doesn't have uid=100. Correct this before installing %{name}." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 100 -g jboss -d %{_libdir}/%{name} -s /bin/sh \
+		-c "JBoss" jboss
 fi
 
 %post
@@ -109,8 +122,8 @@ fi
 
 %postun
 if [ "$1" = "0" ] ; then
-	/usr/sbin/userdel jboss 2> /dev/null || true
-	/usr/sbin/groupdel jboss 2> /dev/null || true
+	%userremove jboss
+	%groupremove jboss
 fi
 
 %files
