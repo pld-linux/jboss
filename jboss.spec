@@ -1,12 +1,12 @@
 Summary:	Java application server JBoss
 Summary(pl):	Serwer aplikacji Javy JBoss
 Name:		jboss
-Version:	3.2.3
+Version:	3.2.5
 Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}-src.tar.gz
-# Source0-md5:	324337a9b97235696de59ca343993769
+# Source0-md5:	ded8ad667e49d82a4567d2c8f726fcbc
 Source1:	http://dl.sourceforge.net/sourceforge/%{name}/QuickStart-30x.pdf
 # Source1-md5:	ca9f0c92510b230e91917793516ad814
 Source2:	%{name}.init
@@ -34,7 +34,7 @@ Serwer aplikacji Javy JBoss.
 
 %prep
 %setup -q -n %{name}-%{version}-src
-%patch0 -p1
+#%patch0 -p1
 #%patch1 -p0
 
 %build
