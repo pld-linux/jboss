@@ -13,7 +13,7 @@ Source2:	%{name}.init
 Source3:	%{name}.conf
 Patch0:		%{name}-jpackage.patch
 Patch1:		%{name}-shutdown.patch
-URL:		http://www.jboss.org
+URL:		http://www.jboss.org/
 BuildRequires:	jdk
 Requires:	jdk
 Requires(pre): /usr/bin/getgid
