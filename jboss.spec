@@ -6,8 +6,9 @@ Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
 Source0:	http://belnet.dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}-src.tgz
-# Source0-md5:	507473f9e87b2742f6498e5571ec253e
+# Source0-md5:	98a66b0f148c4a8303907e96963a8bcb
 Source1:	http://belnet.dl.sourceforge.net/sourceforge/%{name}/QuickStart-30x.pdf
+# Source1-md5:	8f9581e920514443bff51221f0e82883
 Source2:	%{name}.init
 Source3:	%{name}.conf
 Patch0:		%{name}-jpackage.patch
