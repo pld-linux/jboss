@@ -1,7 +1,7 @@
 Summary:	Java application server JBoss
 Summary(pl):	Serwer aplikacji Javy JBoss
 Name:		jboss
-Version:	3.2.0
+Version:	3.2.1
 Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
@@ -13,9 +13,7 @@ Source3:	%{name}.conf
 Patch0:		%{name}-jpackage.patch
 Patch1:		%{name}-shutdown.patch
 URL:		http://www.jboss.org
-BuildRequires:	java-env
 BuildRequires:	jdk
-Requires:	java-env
 Requires:	jdk
 Requires(pre): /usr/bin/getgid
 Requires(pre): /bin/id
@@ -26,8 +24,6 @@ Requires(postun):      /usr/sbin/groupdel
 Requires(post,preun):	/sbin/chkconfig
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%define		javacfgdir	/etc/sysconfig/java
 
 %description
 Java application server JBoss.
@@ -77,8 +73,6 @@ do
     done
 done
 
-install -d $RPM_BUILD_ROOT%{javacfgdir}
-javacpmgr --findjars $RPM_BUILD_ROOT > $RPM_BUILD_ROOT%{javacfgdir}/cp.%{name}
 
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
@@ -144,7 +138,6 @@ fi
 /var/lib/%{name}/minimal/deploy
 /var/lib/%{name}/minimal/lib
 
-%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) %{javacfgdir}/cp.*
 %attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
 
 # ghost files and directories
