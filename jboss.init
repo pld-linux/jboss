@@ -27,76 +27,75 @@ PIDFILE=/var/run/jboss.pid
 # Functions
 start ()
 {
-    if [ ! -f $LOCKFILE ]
-    then
-    	msg_starting JBoss
+	if [ ! -f $LOCKFILE ]; then
+		msg_starting JBoss
 
-	# Reset log to make sure we don't read old start message below
-	mkdir -p $JBOSS_HOME/server/$JBOSS_CONFIGURATION/log
-	echo > $JBOSS_HOME/server/$JBOSS_CONFIGURATION/log/server.log
+		# Reset log to make sure we don't read old start message below
+		mkdir -p $JBOSS_HOME/server/$JBOSS_CONFIGURATION/log
+		echo > $JBOSS_HOME/server/$JBOSS_CONFIGURATION/log/server.log
 
-	chown -R jboss:jboss $JBOSS_HOME/server/$JBOSS_CONFIGURATION/db > /dev/null 2>&1
-	chown -R jboss:jboss $JBOSS_HOME/server/$JBOSS_CONFIGURATION/log > /dev/null 2>&1
-	chown -R jboss:jboss $JBOSS_HOME/server/$JBOSS_CONFIGURATION/tmp > /dev/null 2>&1
+		chown -R jboss:jboss $JBOSS_HOME/server/$JBOSS_CONFIGURATION/db > /dev/null 2>&1
+		chown -R jboss:jboss $JBOSS_HOME/server/$JBOSS_CONFIGURATION/log > /dev/null 2>&1
+		chown -R jboss:jboss $JBOSS_HOME/server/$JBOSS_CONFIGURATION/tmp > /dev/null 2>&1
 
-	export JAVA_HOME JAVACMD JAVA_OPTS JBOSS_CONFIGURATION JBOSS_OPTIONS JBOSS_CLASSPATH JAVAC_JAR PROFILER
-    		
-	# this requires non false shell for user
-	daemon --user jboss /bin/sh $JBOSS_BINDIR/run.sh --quiet -c $JBOSS_CONFIGURATION $JBOSS_OPTIONS '&'
+		export JAVA_HOME JAVACMD JAVA_OPTS JBOSS_CONFIGURATION JBOSS_OPTIONS JBOSS_CLASSPATH JAVAC_JAR PROFILER
 
-	RETVAL=$?
-	[ $RETVAL -eq 0 ] && touch $LOCKFILE
-    else
-	msg_already_running JBoss
-	RETVAL=1
-    fi
-    return $RETVAL
+		# this requires non false shell for user
+		daemon --user jboss /bin/sh $JBOSS_BINDIR/run.sh --quiet -c $JBOSS_CONFIGURATION $JBOSS_OPTIONS '&'
+
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch $LOCKFILE
+	else
+		msg_already_running JBoss
+		RETVAL=1
+	fi
+	return $RETVAL
 }
 
 stop ()
 {
-    # Stop daemons.
-    if [ -f $LOCKFILE ]; then
-	msg_stopping JBoss
-	export JAVA_HOME JAVACMD JAVA_OPTS JBOSS_CONFIGURATION JBOSS_OPTIONS JBOSS_CLASSPATH JAVAC_JAR PROFILER
-        su - jboss -s /bin/sh -c "$JBOSS_BINDIR/shutdown.sh $JBOSS_SHUTDOWN_OPTIONS > /dev/null 2>&1"
-	RETVAL=$?
-	if [ $RETVAL -eq 0 ]; then
-    	    ok
-        else
-    	    fail
-        fi
+	# Stop daemons.
+	if [ -f $LOCKFILE ]; then
+		msg_stopping JBoss
+		export JAVA_HOME JAVACMD JAVA_OPTS JBOSS_CONFIGURATION JBOSS_OPTIONS JBOSS_CLASSPATH JAVAC_JAR PROFILER
+		su - jboss -s /bin/sh -c "$JBOSS_BINDIR/shutdown.sh $JBOSS_SHUTDOWN_OPTIONS > /dev/null 2>&1"
+		RETVAL=$?
+		if [ $RETVAL -eq 0 ]; then
+			ok
+		else
+			fail
+		fi
 
-	[ $RETVAL -eq 0 ] && rm -f $LOCKFILE $PIDFILE >/dev/null 2>&1
-    else
-    	msg_not_running JBoss
-        RETVAL=1
-    fi
-    return $RETVAL
+		[ $RETVAL -eq 0 ] && rm -f $LOCKFILE $PIDFILE >/dev/null 2>&1
+	else
+		msg_not_running JBoss
+		RETVAL=1
+	fi
+	return $RETVAL
 }
 
 status ()
 {
-    daemon="JBoss"
-    pids=$( ps auxw --cols 500 | grep java | grep org.jboss.Main | awk '{print $2}' | tr '\n' ' ' | sed -e s/\ $// )
+	daemon="JBoss"
+	pids=$( ps auxw --cols 500 | grep java | grep org.jboss.Main | awk '{print $2}' | tr '\n' ' ' | sed -e s/\ $// )
 
-    if [ -n "$pids" ]; then
-    	nls "%s (pid %s) is running..." "$daemon" "$pids"
-    	return 0
-    fi
+	if [ -n "$pids" ]; then
+		nls "%s (pid %s) is running..." "$daemon" "$pids"
+		return 0
+	fi
 
-    if [ -f $PIDFILE ]; then
-    	nls "%s dead but pid file exists" "$daemon"
-    	return 1
-    fi
+	if [ -f $PIDFILE ]; then
+		nls "%s dead but pid file exists" "$daemon"
+		return 1
+	fi
 
-    if [ -f $LOCKFILE ]; then
-	nls "%s dead but subsys locked" "$daemon"
-	return 2
-    fi
+	if [ -f $LOCKFILE ]; then
+		nls "%s dead but subsys locked" "$daemon"
+		return 2
+	fi
 
-    nls "%s is stopped" "$daemon"
-    return 3
+	nls "%s is stopped" "$daemon"
+	return 3
 }
 
 # See how we were called.
@@ -122,7 +121,7 @@ case "$1" in
 	fi
 	;;
   *)
-	echo "Usage: $0 {start|stop|status|restart|reload|condrestart}"
+	msg_usage "$0 {start|stop|restart|reload|condrestart|status}"
 	exit 1
 esac
 
