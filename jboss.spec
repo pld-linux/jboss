@@ -6,7 +6,7 @@ Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}-src.tar.gz
-# Source0-md5:	98a66b0f148c4a8303907e96963a8bcb
+# Source0-md5:	324337a9b97235696de59ca343993769
 Source1:	http://dl.sourceforge.net/sourceforge/%{name}/QuickStart-30x.pdf
 # Source1-md5:	ca9f0c92510b230e91917793516ad814
 Source2:	%{name}.init
