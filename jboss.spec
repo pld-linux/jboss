@@ -65,14 +65,14 @@ ln -sf /var/lib/%{name} $RPM_BUILD_ROOT%{_libdir}/%{name}/server
 # link */lib/*.jar to all/lib/*.jar if file already exists there
 for SERV in minimal default
 do
-    FILES=`ls $RPM_BUILD_ROOT/var/lib/%{name}/$SERV/lib`
-    for FILE in $FILES
-    do
-        if [ -f "$RPM_BUILD_ROOT/var/lib/%{name}/all/lib/$FILE" ]; then
-	    ln -sf /var/lib/%{name}/all/lib/$FILE \
-		$RPM_BUILD_ROOT/var/lib/%{name}/$SERV/lib/$FILE
-	fi
-    done
+	FILES=`ls $RPM_BUILD_ROOT/var/lib/%{name}/$SERV/lib`
+	for FILE in $FILES
+	do
+		if [ -f "$RPM_BUILD_ROOT/var/lib/%{name}/all/lib/$FILE" ]; then
+			ln -sf /var/lib/%{name}/all/lib/$FILE \
+				$RPM_BUILD_ROOT/var/lib/%{name}/$SERV/lib/$FILE
+		fi
+	done
 done
 
 install -d $RPM_BUILD_ROOT/etc/sysconfig
@@ -87,11 +87,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -z "`getgid %{name}`" ]; then
-       /usr/sbin/groupadd -g 100 -r %{name} 2> /dev/null || true
+	/usr/sbin/groupadd -g 100 -r %{name} 2> /dev/null || true
 fi
 if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-       /usr/sbin/useradd -u 100 -g %{name} -M -r -d %{_libdir}/%{name} -s /bin/sh \
-               -c "JBoss" %{name} 2> /dev/null || true
+	/usr/sbin/useradd -u 100 -g %{name} -M -r -d %{_libdir}/%{name} -s /bin/sh \
+		-c "JBoss" %{name} 2> /dev/null || true
 fi
 
 %post
@@ -109,8 +109,8 @@ fi
 
 %postun
 if [ "$1" = "0" ] ; then
-       /usr/sbin/userdel jboss 2> /dev/null || true
-       /usr/sbin/groupdel jboss 2> /dev/null || true
+	/usr/sbin/userdel jboss 2> /dev/null || true
+	/usr/sbin/groupdel jboss 2> /dev/null || true
 fi
 
 %files
