@@ -16,13 +16,8 @@ BuildRequires:	java-env
 BuildRequires:	jdk
 Requires:	java-env
 Requires:	jdk
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
+Requires(pre):	user-jboss
 Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/userdel
-Requires(postun):	/usr/sbin/groupdel
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -86,16 +81,6 @@ install -d $RPM_BUILD_ROOT/var/lib/%{name}/{default,all,minimal}/{db,log,tmp}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
-if [ -z "`getgid %{name}`" ]; then
-	/usr/sbin/groupadd -g 100 -r %{name} 2> /dev/null || true
-fi
-
-if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-	/usr/sbin/useradd -u 100 -g %{name} -M -r -d %{_libdir}/%{name} -s /bin/sh \
-		-c "JBoss" %{name} 2> /dev/null || true
-fi
-
 %post
 if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add jboss
@@ -107,12 +92,6 @@ if [ "$1" = "0" ] ; then
 		/etc/rc.d/init.d/jboss stop 1>&2
 	fi
 	/sbin/chkconfig --del jboss
-fi
-
-%postun
-if [ "$1" = "0" ] ; then
-	/usr/sbin/userdel jboss 2> /dev/null || true
-	/usr/sbin/groupdel jboss 2> /dev/null || true
 fi
 
 %files
