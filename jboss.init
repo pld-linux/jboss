@@ -47,7 +47,6 @@ start ()
 		[ $RETVAL -eq 0 ] && touch $LOCKFILE
 	else
 		msg_already_running JBoss
-		RETVAL=1
 	fi
 	return $RETVAL
 }
@@ -59,19 +58,12 @@ stop ()
 		msg_stopping JBoss
 		export JAVA_HOME JAVACMD JAVA_OPTS JBOSS_CONFIGURATION JBOSS_OPTIONS JBOSS_CLASSPATH JAVAC_JAR PROFILER
 		su - jboss -s /bin/sh -c "$JBOSS_BINDIR/shutdown.sh $JBOSS_SHUTDOWN_OPTIONS > /dev/null 2>&1"
-		RETVAL=$?
-		if [ $RETVAL -eq 0 ]; then
-			ok
-		else
-			fail
-		fi
-
-		[ $RETVAL -eq 0 ] && rm -f $LOCKFILE $PIDFILE >/dev/null 2>&1
+		[ $? -eq 0 ] && ok || fail
+		rm -f $LOCKFILE $PIDFILE >/dev/null 2>&1
 	else
 		msg_not_running JBoss
-		RETVAL=1
 	fi
-	return $RETVAL
+	return 0
 }
 
 status ()
@@ -102,6 +94,7 @@ status ()
 case "$1" in
   start)
 	start
+	RETVAL=$?
 	;;
   stop)
 	stop
@@ -110,19 +103,20 @@ case "$1" in
 	status
 	RETVAL=$?
 	;;
-  restart|reload)
+  restart|force-reload)
 	stop
 	start
+	RETVAL=$?
 	;;
-  condrestart)
-	if [ -f /var/lock/subsys/jboss ]; then
-		stop
-		start
-	fi
-	;;
+#  condrestart)
+#	if [ -f /var/lock/subsys/jboss ]; then
+#		stop
+#		start
+#	fi
+#	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|condrestart|status}"
-	exit 1
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
