@@ -1,7 +1,7 @@
-Summary:	JBoss
-Summary(pl):	JBoss
+Summary:	Java application server JBoss
+Summary(pl):	Serwer aplikacji Javy JBoss
 Name:		jboss
-Version:	3.0.6
+Version:	3.2.0
 Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
@@ -34,7 +34,7 @@ JBoss
 %prep
 %setup -q -n %{name}-%{version}-src
 %patch0 -p1
-%patch1 -p0
+#%patch1 -p0
 
 %build
 JAVA_HOME=%{_libdir}/java
