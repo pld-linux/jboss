@@ -101,57 +101,46 @@ diff -Nur jboss-3.2.0-src.orig/system/src/bin/run.sh jboss-3.2.0-src.chng/system
  
  # For Cygwin, switch paths to Windows format before running java
  if $cygwin; then
-@@ -159,27 +170,37 @@
+@@ -159,6 +159,7 @@
  fi
  
  # Display our environment
--echo "================================================================================"
--echo ""
--echo "  JBoss Bootstrap Environment"
--echo ""
--echo "  JBOSS_HOME: $JBOSS_HOME"
--echo ""
--echo "  JAVA: $JAVA"
--echo ""
--echo "  JAVA_OPTS: $JAVA_OPTS"
--echo ""
--echo "  CLASSPATH: $JBOSS_CLASSPATH"
--echo ""
--echo "================================================================================"
--echo ""
 +if [ "$1" != "--quiet" ]; then
-+    echo "================================================================================"
-+    echo ""
-+    echo "  JBoss Bootstrap Environment"
-+    echo ""
-+    echo "  JBOSS_HOME: $JBOSS_HOME"
-+    echo ""
-+    echo "  JAVA: $JAVA"
-+    echo ""
-+    echo "  JAVA_OPTS: $JAVA_OPTS"
-+    echo ""
-+    echo "  CLASSPATH: $JBOSS_CLASSPATH"
-+    echo ""
-+    echo "================================================================================"
-+    echo ""
+ echo "================================================================================"
+ echo ""
+ echo "  JBoss Bootstrap Environment"
+@@ -173,6 +174,7 @@
+ echo ""
+ echo "================================================================================"
+ echo ""
 +fi
  
  if $useprofiler; then
      # Hand over control to profiler
-     runProfiler
- else
-     # Execute the JVM
--    exec $JAVA $JAVA_OPTS \
-+    if [ "$1" != "--quiet" ]
-+    then
-+        exec "$JAVA" $JAVA_OPTS \
-+             -classpath "$JBOSS_CLASSPATH" \
-+             org.jboss.Main "$@"
-+    else
-+        shift
-+        exec "$JAVA" $JAVA_OPTS \
-             -classpath "$JBOSS_CLASSPATH" \
--            org.jboss.Main "$@"
-+            org.jboss.Main "$@" > /dev/null 2>&1
-+    fi
+@@ -181,12 +183,19 @@
+     STATUS=10
+     while [ $STATUS -eq 10 ]
+     do
+-    # Execute the JVM
+-       $JAVA $JAVA_OPTS \
+-               -classpath "$JBOSS_CLASSPATH" \
+-               org.jboss.Main "$@"        
+-       STATUS=$?
+-       # if it doesn't work, you may want to take a look at this:
+-       #    http://developer.java.sun.com/developer/bugParade/bugs/4465334.html
++	# Execute the JVM
++	if [ "$1" != "--quiet" ]; then
++	    $JAVA $JAVA_OPTS \
++        	-classpath "$JBOSS_CLASSPATH" \
++        	org.jboss.Main "$@"        
++    	    STATUS=$?
++	else
++	    $JAVA $JAVA_OPTS \
++        	-classpath "$JBOSS_CLASSPATH" \
++        	org.jboss.Main "$@" > /dev/null 2>&1
++    	    STATUS=$?	
++	fi
++	# if it doesn't work, you may want to take a look at this:
++        #    http://developer.java.sun.com/developer/bugParade/bugs/4465334.html
+     done
  fi
