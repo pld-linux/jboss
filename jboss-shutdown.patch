@@ -1,0 +1,90 @@
+Index: system/src/main/org/jboss/Shutdown.java
+===================================================================
+RCS file: /cvsroot/jboss/jboss-system/src/main/org/jboss/Attic/Shutdown.java,v
+retrieving revision 1.1.2.3
+diff -a -u -r1.1.2.3 Shutdown.java
+--- system/src/main/org/jboss/Shutdown.java	24 Jan 2003 21:27:01 -0000	1.1.2.3
++++ system/src/main/org/jboss/Shutdown.java	30 Jan 2003 17:32:43 -0000
+@@ -9,7 +9,9 @@
+ 
+ package org.jboss;
+ 
++import java.io.IOException;
+ import java.net.Authenticator;
++import java.net.MalformedURLException;
+ import java.net.ProtocolException;
+ import java.net.URL;
+ import java.net.URLEncoder;
+@@ -31,6 +33,7 @@
+  * @author <a href="mailto:dewayne@dmsoft.com">Dewayne McNair</a>
+  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
+  * @author Scott.Stark@jboss.org
++ * @author ville.skytta@iki.fi
+  * @version $Revision$
+  */
+ public class Shutdown
+@@ -42,7 +45,8 @@
+     * Parse the command line and shutdown the remote server.
+     *
+     * @param  args       Command line arguments.
+-    * @throws Exception  Invalid port number.
++    * @throws Exception  Invalid port number or unexpected exception
++    *                    during shutdown.
+     */
+    public static void main(final String args[]) throws Exception
+    {
+@@ -79,32 +83,32 @@
+    }
+ 
+    /**
+-    * Connect to the JBoss servers HTML JMX adapter and invoke the
++    * Connect to the JBoss server's HTML JMX adapter and invoke the
+     * shutdown service.
+     *
+     * @param host The hostname of the JMX server.
+     * @param port The port of the JMX server.
++    * @throws IOException Unexpected exception.
+     *
+     */
+    public static void shutdown(final String host, final int port,
+       final String username, final String password, final String command)
++      throws IOException
+    {
+-      try
+-      {
+-         System.out.println("Shutting down server "+host+":"+port);
+-         Authenticator.setDefault(new PasswordAuthenticator(username, password));
+-         URL url = new URL("http", host, port, command);
+-         System.out.println(url);
++      System.out.println("Shutting down server "+host+":"+port);
++      Authenticator.setDefault(new PasswordAuthenticator(username, password));
++      URL url = new URL("http", host, port, command);
++      System.out.println(url);
++      try {
+          URLConnection conn = url.openConnection();
+          conn.getContent();
+       }
+-      catch(ProtocolException e)
+-      {
+-         e.printStackTrace();
+-      }
+-      catch(Exception ignore)
++      catch(IOException e)
+       {
+-         // Since the web container is shuting down an error is thrown
++         // Since the web container is shutting down, an IOException is thrown.
++         if (e instanceof ProtocolException) {
++            throw e;
++         }
+       }
+       System.out.println("Shutdown complete");
+    }
+@@ -117,7 +121,7 @@
+       PasswordAuthenticator(String username, String password)
+       {
+          this.username = username;
+-         this.password = password.toCharArray();
++         this.password = (password == null) ? null : password.toCharArray();
+       }
+       protected PasswordAuthentication getPasswordAuthentication()
+       {
