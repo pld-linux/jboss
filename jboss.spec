@@ -115,7 +115,7 @@ fi
 
 %files
 %defattr(644,jboss,jboss,755)
-%attr(755,root,root) /etc/rc.d/init.d/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 
 %dir %{_libdir}/%{name}
 
