@@ -15,7 +15,7 @@ Patch0:		%{name}-jpackage.patch
 Patch1:		%{name}-shutdown.patch
 URL:		http://www.jboss.org/
 BuildRequires:	jdk
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 Requires:	jdk
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
@@ -89,23 +89,8 @@ install -d $RPM_BUILD_ROOT/var/lib/%{name}/{default,all,minimal}/{db,log,tmp}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid jboss`" ]; then
-	if [ "`/usr/bin/getgid jboss`" != 100 ]; then
-		echo "Error: group jboss doesn't have gid=100. Correct this before installing %{name}." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 100 jboss
-fi
-if [ -n "`/bin/id -u jboss 2>/dev/null`" ]; then
-	if [ "`/bin/id -u jboss`" != 100 ]; then
-		echo "Error: user jboss doesn't have uid=100. Correct this before installing %{name}." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 100 -g jboss -d %{_libdir}/%{name} -s /bin/sh \
-		-c "JBoss" jboss
-fi
+%groupadd -g 100 jboss
+%useradd -u 100 -g jboss -d %{_libdir}/%{name} -s /bin/sh -c "JBoss" jboss
 
 %post
 if [ "$1" = "1" ] ; then
