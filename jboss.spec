@@ -5,7 +5,7 @@ Version:	4.0.2
 Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
-Source0:	http://mesh.dl.sourceforge.net/jboss/%{name}-%{version}-src.tar.gz
+Source0:	http://dl.sourceforge.net/jboss/%{name}-%{version}-src.tar.gz
 # Source0-md5:	701ea91a9161b40ec9d94a924278b460
 Source1:	http://dl.sourceforge.net/jboss/QuickStart-30x.pdf
 # Source1-md5:	ca9f0c92510b230e91917793516ad814
