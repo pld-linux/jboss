@@ -11,9 +11,6 @@
 # Source function library
 . /etc/rc.d/init.d/functions
 
-# Get network config
-. /etc/sysconfig/network
-
 # Get service config
 [ -f /etc/sysconfig/jboss ] && . /etc/sysconfig/jboss
 
