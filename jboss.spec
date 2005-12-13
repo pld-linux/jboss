@@ -16,14 +16,14 @@ Patch1:		%{name}-shutdown.patch
 URL:		http://www.jboss.org/
 BuildRequires:	jdk
 BuildRequires:	rpmbuild(macros) >= 1.202
-Requires:	jdk
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
+Requires:	jdk
 Provides:	group(jboss)
 Provides:	user(jboss)
 BuildArch:	noarch
@@ -137,7 +137,7 @@ fi
 /var/lib/%{name}/minimal/deploy
 /var/lib/%{name}/minimal/lib
 
-%attr(644,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 
 # ghost files and directories
 %ghost %{_libdir}/%{name}/tmp
