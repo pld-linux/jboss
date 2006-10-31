@@ -1,12 +1,12 @@
 Summary:	Java application server JBoss
 Summary(pl):	Serwer aplikacji Javy JBoss
 Name:		jboss
-Version:	4.0.2
+Version:	4.0.3
 Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
 Source0:	http://dl.sourceforge.net/jboss/%{name}-%{version}-src.tar.gz
-# Source0-md5:	701ea91a9161b40ec9d94a924278b460
+# Source0-md5:	a129dcb22baa04ab6e0f432405959bd4
 Source1:	http://dl.sourceforge.net/jboss/QuickStart-30x.pdf
 # Source1-md5:	ca9f0c92510b230e91917793516ad814
 Source2:	%{name}.init
@@ -41,10 +41,10 @@ Serwer aplikacji Javy JBoss.
 #%patch1 -p0
 
 %build
-JAVA_HOME=%{_libdir}/java
-export JAVA_HOME
+#JAVA_HOME=%{_libdir}/java
+#export JAVA_HOME
 chmod +x build/build.sh
-build/build.sh
+JAVA_HOME=%{java_home} build/build.sh
 
 %install
 rm -rf $RPM_BUILD_ROOT
