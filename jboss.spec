@@ -41,8 +41,6 @@ Serwer aplikacji Javy JBoss.
 #%patch1 -p0
 
 %build
-#JAVA_HOME=%{_libdir}/java
-#export JAVA_HOME
 chmod +x build/build.sh
 JAVA_HOME=%{java_home} build/build.sh
 
@@ -137,7 +135,7 @@ fi
 /var/lib/%{name}/minimal/deploy
 /var/lib/%{name}/minimal/lib
 
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 
 # ghost files and directories
 %ghost %{_libdir}/%{name}/tmp
