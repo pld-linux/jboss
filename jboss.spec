@@ -1,5 +1,5 @@
 Summary:	Java application server JBoss
-Summary(pl):	Serwer aplikacji Javy JBoss
+Summary(pl.UTF-8):   Serwer aplikacji Javy JBoss
 Name:		jboss
 Version:	4.0.3
 Release:	1
@@ -32,7 +32,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Java application server JBoss.
 
-%description -l pl
+%description -l pl.UTF-8
 Serwer aplikacji Javy JBoss.
 
 %prep
