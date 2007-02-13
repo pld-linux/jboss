@@ -1,5 +1,5 @@
 Summary:	Java application server JBoss
-Summary(pl.UTF-8):   Serwer aplikacji Javy JBoss
+Summary(pl.UTF-8):	Serwer aplikacji Javy JBoss
 Name:		jboss
 Version:	4.0.3
 Release:	1
